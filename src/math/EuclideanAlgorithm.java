@@ -1,18 +1,23 @@
 package math;
+
 public class EuclideanAlgorithm {
 	int gcd;
 	int x;
 	int y;
 
-	public EuclideanAlgorithm(int x, int y) {
+	public EuclideanAlgorithm(int x, int y, boolean recursive) {
 		if (x > y) {
-			gcd = calc(x, y);
+			helper(x, y, recursive);
 		} else {
-			gcd = calc(y, x);
+			helper(y, x, recursive);
 		}
 	}
 
-	public int calc(int x, int y) {
+	public void helper(int x, int y, boolean recursive) {
+		gcd = (recursive) ? calculateRecursively(x, y) : calculate(x, y);
+	}
+
+	public int calculate(int x, int y) {
 		this.x = x;
 		this.y = y;
 		int remainder = x % y;
@@ -24,12 +29,14 @@ public class EuclideanAlgorithm {
 		return y;
 	}
 
-	public String toString() {
-		return "The GCD of " + x + " and " + y + " is " + gcd;
+	public int calculateRecursively(int x, int y) {
+		if (y == 0)
+			return x;
+		else
+			return calculateRecursively(y, x % y);
 	}
 
-	public static void main(String[] args) {
-		EuclideanAlgorithm ea = new EuclideanAlgorithm(21, 7);
-		System.out.println(ea.toString());
+	public String toString() {
+		return "The GCD of " + x + " and " + y + " is " + gcd;
 	}
 }
