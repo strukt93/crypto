@@ -37,7 +37,8 @@ public class FeistelCipher {
 		for (int i = 1; i < plainText.length(); i++) {
 			if (i % 4 == 0) {
 				String binary = toBinary(bytes);
-				blocks.add((binary.length() < 32) ? "0" + binary : binary);
+				blocks.add(binary);
+				// blocks.add((binary.length() < 32) ? "0" + binary : binary);
 				bytes = "";
 			}
 			bytes += plainText.charAt(i);
@@ -45,10 +46,9 @@ public class FeistelCipher {
 		blocks.add(padWithZeros(toBinary(bytes)));
 		String out = "";
 		for (int j = 0; j < blocks.size(); j++) {
-			System.out.println(blocks.get(j));
-			String x = toBytes(blocks.get(j));
+			String x = blocks.get(j);
 			System.out.println(x);
-			out += x;
+			out += toBytes(x);
 		}
 		System.out.println(out);
 	}
@@ -86,7 +86,7 @@ public class FeistelCipher {
 		String out = "";
 		for (byte b : bytes) {
 			String bString = Integer.toBinaryString(b);
-			if (bString.length() < 8)
+			while (bString.length() < 8)
 				bString = "0" + bString;
 			out += bString;
 		}
@@ -105,7 +105,6 @@ public class FeistelCipher {
 	}
 
 	public static void main(String[] args) {
-		FeistelCipher fc = new FeistelCipher("hello my name is mustafaxxx");
-		System.out.println(fc.toBinary("o") + ", " + fc.toBinary("7"));
+		FeistelCipher fc = new FeistelCipher("Hello my name IS ASD 123123 .,?< !@#$%#$^%^*");
 	}
 }
