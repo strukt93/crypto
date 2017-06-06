@@ -1,6 +1,7 @@
 package ciphers;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class FeistelCipher {
@@ -8,12 +9,15 @@ public class FeistelCipher {
 	String cipherText;
 	String key;
 	Stack<String> keys;
+	ArrayList<String> blocks;
 
 	public FeistelCipher(String plainText) {
 		this.plainText = plainText;
 		cipherText = "";
-		key = generateKey();
+		// key = generateKey();
 		keys = new Stack<String>();
+		blocks = new ArrayList<String>();
+		generateBlocks();
 	}
 
 	public String generateSubKey() {
@@ -22,10 +26,37 @@ public class FeistelCipher {
 		return subKey;
 	}
 
+	public String padWithZeros(String binary) {
+		while (binary.length() < 32)
+			binary += "0";
+		return binary;
+	}
+
+	public void generateBlocks() {
+		String bytes = "" + plainText.charAt(0);
+		for (int i = 1; i < plainText.length(); i++) {
+			if (i % 4 == 0) {
+				String binary = toBinary(bytes);
+				blocks.add((binary.length() < 32) ? "0" + binary : binary);
+				bytes = "";
+			}
+			bytes += plainText.charAt(i);
+		}
+		blocks.add(padWithZeros(toBinary(bytes)));
+		String out = "";
+		for (int j = 0; j < blocks.size(); j++) {
+			System.out.println(blocks.get(j));
+			String x = toBytes(blocks.get(j));
+			System.out.println(x);
+			out += x;
+		}
+		System.out.println(out);
+	}
+
 	public String generateKey() {
 		SecureRandom sr = new SecureRandom();
 		String s = "";
-		while (s.length() < 64) {
+		while (s.length() < 32) {
 			s += sr.nextInt(2);
 		}
 		return s;
@@ -39,6 +70,15 @@ public class FeistelCipher {
 			z += (c1 == c2) ? "0" : "1";
 		}
 		return z;
+	}
+
+	public String toBytes(String binary) {
+		String ret = "";
+		for (int i = 0; i < 4; i++) {
+			int val = Integer.parseInt(binary.substring(8 * i, (i + 1) * 8), 2);
+			ret += (char) val;
+		}
+		return ret;
 	}
 
 	public String toBinary(String s) {
@@ -64,19 +104,8 @@ public class FeistelCipher {
 		return out;
 	}
 
-	public String f(String rightHalf, String subKey) {
-		return xor(rightHalf, subKey);
-	}
-
-	public void encrypt(String plainText) {
-		String leftHalf = plainText.substring(0, 31);
-		String rightHalf = plainText.substring(31, 64);
-		for (int i = 0; i < 16; i++) {
-			
-		}
-	}
-
 	public static void main(String[] args) {
-		FeistelCipher fc = new FeistelCipher("");
+		FeistelCipher fc = new FeistelCipher("hello my name is mustafaxxx");
+		System.out.println(fc.toBinary("o") + ", " + fc.toBinary("7"));
 	}
 }
