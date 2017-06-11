@@ -1,5 +1,7 @@
 package data;
 
+import java.security.SecureRandom;
+
 public class Binary {
 	/*
 	 * Returns a string with the supplied targetLength as it's length value with
@@ -12,9 +14,29 @@ public class Binary {
 		return padWithZerosRight(binary, targetLength);
 	}
 
+	/* Generates a variable length key of bits. */
+	public static String generateKey(int length) {
+		SecureRandom sr = new SecureRandom();
+		String s = "";
+		while (s.length() < length) {
+			s += sr.nextInt(2);
+		}
+		return s;
+	}
+
+	/* Generates an array of positive integer values. */
+	public static int[] generateIntKey(int length) {
+		SecureRandom random = new SecureRandom();
+		byte bytes[] = new byte[length];
+		int values[] = new int[length];
+		random.nextBytes(bytes);
+		for (int i = 0; i < length; i++)
+			values[i] = Math.abs(bytes[i]);
+		return values;
+	}
+
 	/*
-	 * Helper function for when the value of the direction parameter is set to
-	 * true.
+	 * Helper function for when the value of the direction parameter is set to true.
 	 */
 	public static String padWithZerosLeft(String binary, int targetLength) {
 		while (binary.length() < targetLength) {
@@ -35,16 +57,16 @@ public class Binary {
 	}
 
 	/*
-	 * Returns the supplied string of a binary represented value after
-	 * performing a circular shift lift.
+	 * Returns the supplied string of a binary represented value after performing a
+	 * circular shift lift.
 	 */
 	public static String circularShiftLeft(String s) {
 		return s.substring(1, s.length()) + s.charAt(0);
 	}
 
 	/*
-	 * Returns the supplied string of a binary represented value after
-	 * performing a circular shift right.
+	 * Returns the supplied string of a binary represented value after performing a
+	 * circular shift right.
 	 */
 	public static String circularShiftRight(String s) {
 		return s.charAt(s.length() - 1) + s.substring(0, s.length() - 1);
@@ -70,7 +92,8 @@ public class Binary {
 	 */
 	public static String toBytes(String s) {
 		String ret = "";
-		for (int i = 0; i < 4; i++) {
+		int limit = s.length() / 8;
+		for (int i = 0; i < limit; i++) {
 			int val = Integer.parseInt(s.substring(8 * i, (i + 1) * 8), 2);
 			ret += (char) val;
 		}
@@ -91,4 +114,5 @@ public class Binary {
 		}
 		return out;
 	}
+
 }
