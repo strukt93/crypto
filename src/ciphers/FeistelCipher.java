@@ -102,7 +102,7 @@ public class FeistelCipher {
 	}
 
 	public static void main(String[] args) {
-		FeistelCipher fc = new FeistelCipher("I am legend");
+		FeistelCipher fc = new FeistelCipher("I love cookie <3");
 		fc.encrypt();
 		fc.decrypt();
 	}

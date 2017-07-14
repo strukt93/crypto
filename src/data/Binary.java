@@ -91,4 +91,11 @@ public class Binary {
 		}
 		return out;
 	}
+
+	/*
+	 * Converts a hexadecimal string to it's bianry string representation.
+	 */
+	public static String binaryToHex(String hex) {
+		return Integer.toString(Integer.parseInt(hex, 2), 16);
+	}
 }
