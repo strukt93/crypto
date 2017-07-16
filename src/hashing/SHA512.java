@@ -3,6 +3,7 @@ package hashing;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import data.Binary;
 import data.Hex;
 
 /*This is my implementation of the SHA512 hash function, which
@@ -26,29 +27,47 @@ public class SHA512 {
 		abcdefgh.put('f', "9B05688C2B3E6C1F");
 		abcdefgh.put('g', "1F83D9ABFB41BD6B");
 		abcdefgh.put('h', "5BE0CD19137E2179");
-		processMessage(m);
-		for (String s : message) {
-			System.out.println(s);
+		parseMessage();
+	}
+
+	private void parseMessage() {
+		String binRep = Binary.toBinary(origMessage) + "1";
+		int decimalLength = getOriginalLengthDec();
+		for (int i = 896 - decimalLength - 1; i > 0; i--) {
+			binRep += "0";
+		}
+		String length = Binary.intToBinary(decimalLength);
+		while (length.length() != 128) {
+			length = "0" + length;
+		}
+		binRep += length;
+		fillArrayList(binRep);
+	}
+
+	private void fillArrayList(String binRep) {
+		for (int i = 0; i < 16; i++) {
+			String s = Hex.binaryToHex(binRep.substring(i * 64, (i + 1) * 64));
+			s = Hex.padWithZeros(s, 16, true);
+			message.add(s);
 		}
 	}
 
-	public void processMessage(String m) {
-		String s = m.charAt(0) + "";
-		for (int i = 1; i < m.length(); i++) {
-			if (i % 8 == 0) {
-				message.add(Hex.stringToHex(s));
-				s = "";
-			}
-			s += m.charAt(i);
-		}
-		String hex = Hex.stringToHex(s);
-		if (hex.length() <= 14) {
-			hex = Hex.padWithZeros(hex + "8", 16, false);
-			message.add(hex);
-		} else {
-			message.add(hex);
-			message.add(Hex.padWithZeros("8", 16, false));
-		}
+	/*
+	 * Returns the number of bits in the original message in a hexadecimal
+	 * format.
+	 */
+	private int getOriginalLengthHex() {
+		String binary = Binary.toBinary(origMessage);
+		return Hex.intToHex(binary.length());
+	}
+
+	/*
+	 * Returns the number of bits in the original message in a decimal format.
+	 */
+
+	private int getOriginalLengthDec() {
+		String binary = Binary.toBinary(origMessage);
+		return binary.length();
 	}
 
 	public static void main(String[] args) {

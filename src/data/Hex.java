@@ -34,6 +34,10 @@ public class Hex {
 		return hex;
 	}
 
+	public static int intToHex(int n) {
+		return Integer.parseInt(Integer.toString(n, 16));
+	}
+
 	public static String stringToHex(String in) {
 		String out = "";
 		for (int i = 0; i < in.length(); i++) {
@@ -42,10 +46,14 @@ public class Hex {
 		return out;
 	}
 
-	public static String hexToBinary(String binary) {
-		String s = Integer.toString(Integer.parseInt(binary, 16), 2);
+	public static String hexToBinary(String hex) {
+		String s = Integer.toString(Integer.parseInt(hex, 16), 2);
 		while (s.length() != 8)
 			s = "0" + s;
 		return s;
+	}
+
+	public static String binaryToHex(String binary) {
+		return Long.toString(Long.parseLong(binary, 2), 16);
 	}
 }

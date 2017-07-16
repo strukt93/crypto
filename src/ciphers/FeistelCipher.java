@@ -1,5 +1,6 @@
 package ciphers;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -17,10 +18,19 @@ public class FeistelCipher {
 	public FeistelCipher(String plainText) {
 		this.plainText = plainText;
 		cipherTextBlocks = new Stack<String>();
-		key = Binary.generateKey(32);
+		key = generateKey();
 		subKey = key;
 		plainTextBlocks = new ArrayList<String>();
 		generateBlocks();
+	}
+
+	private String generateKey() {
+		SecureRandom sr = new SecureRandom();
+		String s = "";
+		while (s.length() < 32) {
+			s += sr.nextInt(2);
+		}
+		return s;
 	}
 
 	private String generateSubKey(boolean direction) {
