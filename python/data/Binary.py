@@ -75,8 +75,8 @@ def to_bytes(bit_str):
     Converts the supplied bit string to an equivalent
     string of bytes. Assumes string lengths that are
     multiples of 8.
-    :param bit_str:
-    :return:
+    :param bit_str: The string of bits
+    :return: An equivalent string of bytes
     """
     if len(bit_str) % 8 != 0:
         return None
@@ -85,3 +85,27 @@ def to_bytes(bit_str):
     for i in range(0, out_len):
         result += chr(int(bit_str[i * 8: (i + 1) * 8], 2))
     return result
+
+
+def to_binary(byte_str, base=16):
+    """
+    Turns a byte string into a bit string by converting
+    every byte to its equivalent binary representation.
+    :param byte_str: The string of bytes
+    :param base: The base to work on, defaults to 16
+    :return: An equivalent string of bits
+    """
+    result = ""
+    for byte in byte_str:
+        result += bin(int(byte, base=base))[2:].zfill(8)
+    return result
+
+
+def int_to_binary(int):
+    """
+    Converts an integer to its 8-bit equivalent
+    in binary format.
+    :param int: The integer to convert
+    :return: The binary equivalent
+    """
+    return bin(int)[2:].zfill(8)
