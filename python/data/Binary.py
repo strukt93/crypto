@@ -26,7 +26,7 @@ def pad_zeros_right(bit_str, target_length):
     return bit_str
 
 
-def circular_shift_left(bit_str, num_rounds):
+def circular_shift_left(bit_str, num_rounds=1):
     """
     Does circular shift lefts on the supplied
     bit string "num_rounds" times.
@@ -40,7 +40,7 @@ def circular_shift_left(bit_str, num_rounds):
     return bit_str
 
 
-def circular_shift_right(bit_str, num_rounds):
+def circular_shift_right(bit_str, num_rounds=1):
     """
     Does circular shift rights on the supplied
     bit string "num_rounds" times.
@@ -62,8 +62,6 @@ def xor(bit_str_x, bit_str_y):
     :param bit_str_y: The second bit string
     :return: The result of XORing the two bit strings
     """
-    if len(bit_str_x) != len(bit_str_y):
-        return None
     result = ""
     for x_char, y_char in zip(bit_str_x, bit_str_y):
         result += "0" if x_char == y_char else "1"
@@ -87,17 +85,16 @@ def to_bytes(bit_str):
     return result
 
 
-def to_binary(byte_str, base=16):
+def to_binary(byte_str):
     """
     Turns a byte string into a bit string by converting
     every byte to its equivalent binary representation.
     :param byte_str: The string of bytes
-    :param base: The base to work on, defaults to 16
     :return: An equivalent string of bits
     """
     result = ""
     for byte in byte_str:
-        result += bin(int(byte, base=base))[2:].zfill(8)
+        result += bin(int.from_bytes(byte.encode(), 'big'))[2:].zfill(8)
     return result
 
 
